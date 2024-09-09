@@ -1,0 +1,18 @@
+name: Sync Fork
+
+on:
+  push: # 当有 push 到仓库时触发，主要用于测试
+  schedule:
+    - cron: '* */3 * * *' # 每3小时触发一次，可以根据需求调整
+
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: TG908/fork-sync@v1.6.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          owner: continew-org # 上游仓库的所有者
+          repo: continew-admin # 上游仓库的名称
+          head: dev
+          base: dev
