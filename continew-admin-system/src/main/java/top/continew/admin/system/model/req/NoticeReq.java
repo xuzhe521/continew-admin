@@ -80,13 +80,13 @@ public class NoticeReq extends BaseReq {
     /**
      * 通知范围
      */
-    @Schema(description = "通知范围(1.所有人 2.指定用户)",example = "1")
+    @Schema(description = "通知范围(1.所有人 2.指定用户)", example = "1")
     @NotNull(message = "通知范围不能为空")
     private Integer noticeScope;
 
     /**
      * 指定用户
      */
-    @Schema(description = "指定用户",example = "[1,2,3]")
+    @Schema(description = "指定用户", example = "[1,2,3]")
     private List<String> noticeUsers;
 }

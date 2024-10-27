@@ -17,14 +17,12 @@
 package top.continew.admin.controller.system;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.hutool.core.lang.tree.Tree;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import top.continew.admin.system.model.query.DeptQuery;
 import top.continew.admin.system.model.query.RoleQuery;
 import top.continew.admin.system.model.req.RoleReq;
 import top.continew.admin.system.model.resp.RoleDetailResp;
@@ -34,7 +32,6 @@ import top.continew.admin.system.service.UserRoleService;
 import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
 import top.continew.starter.extension.crud.controller.BaseController;
 import top.continew.starter.extension.crud.enums.Api;
-import top.continew.starter.extension.crud.model.query.SortQuery;
 
 import java.util.List;
 
@@ -61,7 +58,7 @@ public class RoleController extends BaseController<RoleService, RoleResp, RoleDe
     @Operation(summary = "关联用户", description = "批量关联用户")
     @SaCheckPermission("system:role:bindUsers")
     @PostMapping("/bindUsers/{id}")
-    public void bindUsers(@PathVariable("id") Long roleId,@RequestBody List<Long> userIds) {
+    public void bindUsers(@PathVariable("id") Long roleId, @RequestBody List<Long> userIds) {
         userRoleService.bindUserIds(roleId, userIds);
     }
 }

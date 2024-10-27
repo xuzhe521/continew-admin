@@ -29,7 +29,6 @@
         <module>continew-admin-system</module>
         <module>continew-admin-common</module>
         <module>continew-admin-extension</module>
-        <module>continew-admin-open</module>
     </modules>
 
     <properties>
@@ -68,17 +67,17 @@
                 <version>${revision}</version>
             </dependency>
 
+            <!-- 能力开放模块（后续会改造为独立插件） -->
+            <dependency>
+                <groupId>top.continew</groupId>
+                <artifactId>continew-admin-open</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!-- 代码生成器插件（后续会改造为独立插件） -->
             <dependency>
                 <groupId>top.continew</groupId>
                 <artifactId>continew-admin-generator</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <!-- 能力开放模块 -->
-            <dependency>
-                <groupId>top.continew</groupId>
-                <artifactId>continew-admin-open</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

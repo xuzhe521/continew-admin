@@ -33,7 +33,7 @@ import java.util.List;
  * @since 2023/8/20 10:55
  */
 @Data
-@TableName(value = "sys_notice",autoResultMap = true)
+@TableName(value = "sys_notice", autoResultMap = true)
 public class NoticeDO extends BaseDO {
 
     @Serial

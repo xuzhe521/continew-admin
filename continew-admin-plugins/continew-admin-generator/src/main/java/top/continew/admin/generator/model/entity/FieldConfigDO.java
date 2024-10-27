@@ -21,6 +21,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.meta.Column;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -50,6 +51,12 @@ public class FieldConfigDO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    /**
+     * ID
+     */
+    @TableId
+    private Long id;
 
     /**
      * 表名称

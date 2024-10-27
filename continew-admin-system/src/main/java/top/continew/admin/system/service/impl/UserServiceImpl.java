@@ -511,7 +511,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
                     .collect(Collectors.toList());
                 deptIdList.add(deptId);
                 q.in("t1.dept_id", deptIdList);
-            }).in(CollUtil.isNotEmpty(userIdList),"t1.id", userIdList);
+            })
+            .in(CollUtil.isNotEmpty(userIdList), "t1.id", userIdList);
     }
 
     @Override

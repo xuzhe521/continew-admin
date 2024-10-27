@@ -43,7 +43,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeMapper, NoticeDO, N
 
     @Override
     public List<DashboardNoticeResp> listDashboard() {
-        Long userId =  UserContextHolder.isAdmin()? null: UserContextHolder.getUserId();
+        Long userId = UserContextHolder.isAdmin() ? null : UserContextHolder.getUserId();
         return baseMapper.selectDashboardList(userId);
     }
 }

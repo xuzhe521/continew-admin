@@ -105,55 +105,59 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, DeptDO, DeptRes
             // 创建一个部门ID到用户的映射
             UserQuery userQuery = new UserQuery();
             userQuery.setStatus(DisEnableStatusEnum.ENABLE);
-            Map<Long, List<UserResp>> userMap = userService.list(userQuery, null).stream()
-                    .collect(Collectors.groupingBy(UserResp::getDeptId));
+            Map<Long, List<UserResp>> userMap = userService.list(userQuery, null)
+                .stream()
+                .collect(Collectors.groupingBy(UserResp::getDeptId));
 
             String rootId = "dept_0";
 
             return TreeUtil.build(list, rootId, treeNodeConfig, (node, tree) -> {
-                Long departmentId = ReflectUtil.invoke(node, CharSequenceUtil.genGetter(treeField.value()), new Object[0]);
+                Long departmentId = ReflectUtil.invoke(node, CharSequenceUtil.genGetter(treeField
+                    .value()), new Object[0]);
                 String uniqueDeptId = "dept_" + departmentId;
                 tree.setId(uniqueDeptId);
-                Long parentId =  ReflectUtil.invoke(node, CharSequenceUtil.genGetter(treeField.parentIdKey()), new Object[0]);
+                Long parentId = ReflectUtil.invoke(node, CharSequenceUtil.genGetter(treeField
+                    .parentIdKey()), new Object[0]);
                 tree.setParentId(parentId != null ? "dept_" + parentId : null);
                 tree.setName(ReflectUtil.invoke(node, CharSequenceUtil.genGetter(treeField.nameKey()), new Object[0]));
-                tree.setWeight(ReflectUtil.invoke(node, CharSequenceUtil.genGetter(treeField.weightKey()), new Object[0]));
+                tree.setWeight(ReflectUtil.invoke(node, CharSequenceUtil.genGetter(treeField
+                    .weightKey()), new Object[0]));
                 tree.putExtra("origId", departmentId);
                 tree.putExtra("isUser", false);
 
                 // 添加用户信息到树节点
                 if (userMap.containsKey(departmentId)) {
                     List<UserResp> userList = userMap.get(departmentId);
-                    List<Tree<String>> userTrees = userList.stream()
-                            .map(user -> {
-                                Tree<String> userTree = new Tree<>();
-                                String uniqueUserId = "user_" + user.getId();
-                                String userAliasName = user.getUsername() + "(" + user.getNickname() + ")";
-                                userTree.setId(uniqueUserId);
-                                userTree.setParentId(uniqueDeptId);
-                                userTree.setName(userAliasName);
-                                userTree.setWeight(0);
-                                userTree.putExtra("origId", user.getId()); // 添加原始用户ID
-                                userTree.putExtra("isUser", true); // 添加原始用户ID
-                                return userTree;
-                            })
-                            .collect(Collectors.toList());
+                    List<Tree<String>> userTrees = userList.stream().map(user -> {
+                        Tree<String> userTree = new Tree<>();
+                        String uniqueUserId = "user_" + user.getId();
+                        String userAliasName = user.getUsername() + "(" + user.getNickname() + ")";
+                        userTree.setId(uniqueUserId);
+                        userTree.setParentId(uniqueDeptId);
+                        userTree.setName(userAliasName);
+                        userTree.setWeight(0);
+                        userTree.putExtra("origId", user.getId()); // 添加原始用户ID
+                        userTree.putExtra("isUser", true); // 添加原始用户ID
+                        return userTree;
+                    }).collect(Collectors.toList());
                     tree.setChildren(userTrees);
                 }
 
                 if (!isSimple) {
                     List<Field> fieldList = ReflectUtils.getNonStaticFields(this.getListClass());
                     fieldList.removeIf((f) -> {
-                        return CharSequenceUtil.equalsAnyIgnoreCase(f.getName(), new CharSequence[]{treeField.value(), treeField.parentIdKey(), treeField.nameKey(), treeField.weightKey(), treeField.childrenKey()});
+                        return CharSequenceUtil.equalsAnyIgnoreCase(f.getName(), new CharSequence[] {treeField.value(),
+                            treeField.parentIdKey(), treeField.nameKey(), treeField.weightKey(), treeField
+                                .childrenKey()});
                     });
                     fieldList.forEach((f) -> {
-                        tree.putExtra(f.getName(), ReflectUtil.invoke(node, CharSequenceUtil.genGetter(f.getName()), new Object[0]));
+                        tree.putExtra(f.getName(), ReflectUtil.invoke(node, CharSequenceUtil.genGetter(f
+                            .getName()), new Object[0]));
                     });
                 }
             });
         }
     }
-
 
     @Override
     protected void beforeAdd(DeptReq req) {
@@ -180,13 +184,13 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, DeptDO, DeptRes
         if (ObjectUtil.notEqual(newStatus, oldDept.getStatus())) {
             List<DeptDO> children = this.listChildren(id);
             long enabledChildrenCount = children.stream()
-                    .filter(d -> DisEnableStatusEnum.ENABLE.equals(d.getStatus()))
-                    .count();
+                .filter(d -> DisEnableStatusEnum.ENABLE.equals(d.getStatus()))
+                .count();
             CheckUtils.throwIf(DisEnableStatusEnum.DISABLE
-                    .equals(newStatus) && enabledChildrenCount > 0, "禁用 [{}] 前，请先禁用其所有下级部门", oldName);
+                .equals(newStatus) && enabledChildrenCount > 0, "禁用 [{}] 前，请先禁用其所有下级部门", oldName);
             DeptDO oldParentDept = this.getByParentId(oldParentId);
             CheckUtils.throwIf(DisEnableStatusEnum.ENABLE.equals(newStatus) && DisEnableStatusEnum.DISABLE
-                    .equals(oldParentDept.getStatus()), "启用 [{}] 前，请先启用其所有上级部门", oldName);
+                .equals(oldParentDept.getStatus()), "启用 [{}] 前，请先启用其所有上级部门", oldName);
         }
         // 变更上级部门
         if (ObjectUtil.notEqual(req.getParentId(), oldParentId)) {
@@ -201,12 +205,12 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, DeptDO, DeptRes
     @Override
     protected void beforeDelete(List<Long> ids) {
         List<DeptDO> list = baseMapper.lambdaQuery()
-                .select(DeptDO::getName, DeptDO::getIsSystem)
-                .in(DeptDO::getId, ids)
-                .list();
+            .select(DeptDO::getName, DeptDO::getIsSystem)
+            .in(DeptDO::getId, ids)
+            .list();
         Optional<DeptDO> isSystemData = list.stream().filter(DeptDO::getIsSystem).findFirst();
         CheckUtils.throwIf(isSystemData::isPresent, "所选部门 [{}] 是系统内置部门，不允许删除", isSystemData.orElseGet(DeptDO::new)
-                .getName());
+            .getName());
         CheckUtils.throwIf(this.countChildren(ids) > 0, "所选部门存在下级部门，不允许删除");
         CheckUtils.throwIf(userService.countByDeptIds(ids) > 0, "所选部门存在用户关联，请解除关联后重试");
         // 删除角色和部门关联
@@ -223,10 +227,10 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, DeptDO, DeptRes
      */
     private boolean isNameExists(String name, Long parentId, Long id) {
         return baseMapper.lambdaQuery()
-                .eq(DeptDO::getName, name)
-                .eq(DeptDO::getParentId, parentId)
-                .ne(null != id, DeptDO::getId, id)
-                .exists();
+            .eq(DeptDO::getName, name)
+            .eq(DeptDO::getParentId, parentId)
+            .ne(null != id, DeptDO::getId, id)
+            .exists();
     }
 
     /**
@@ -264,8 +268,8 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, DeptDO, DeptRes
         }
         DatabaseType databaseType = MetaUtils.getDatabaseTypeOrDefault(dataSource, DatabaseType.MYSQL);
         return ids.stream()
-                .mapToLong(id -> baseMapper.lambdaQuery().apply(databaseType.findInSet(id, "ancestors")).count())
-                .sum();
+            .mapToLong(id -> baseMapper.lambdaQuery().apply(databaseType.findInSet(id, "ancestors")).count())
+            .sum();
     }
 
     /**

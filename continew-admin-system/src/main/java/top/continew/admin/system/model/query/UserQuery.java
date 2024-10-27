@@ -70,6 +70,6 @@ public class UserQuery implements Serializable {
     /**
      * 用户 IDS
      */
-    @Schema(description = "用户 ID数组",example = "[1,2,3]")
+    @Schema(description = "用户 ID数组", example = "[1,2,3]")
     private List<Long> userIds;
 }

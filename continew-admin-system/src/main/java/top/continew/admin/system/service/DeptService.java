@@ -62,9 +62,9 @@ public interface DeptService extends BaseService<DeptResp, DeptResp, DeptQuery, 
     /**
      * 部门用户树
      *
-     * @param query 部门查询条件
+     * @param query     部门查询条件
      * @param sortQuery 排序条件
-     * @param isSimple 是否只返回简单部门树
+     * @param isSimple  是否只返回简单部门树
      * @return 部门数量
      */
     List<Tree<String>> treeWithUsers(DeptQuery query, SortQuery sortQuery, boolean isSimple);
