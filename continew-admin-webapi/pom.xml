@@ -50,6 +50,12 @@
             <artifactId>continew-admin-generator</artifactId>
         </dependency>
 
+        <!-- 能力开放模块（包括应用管理、API开放授权、API开发等） -->
+        <dependency>
+            <groupId>top.continew</groupId>
+            <artifactId>continew-admin-open</artifactId>
+        </dependency>
+
         <!-- Liquibase（用于管理数据库版本，跟踪、管理和应用数据库变化） -->
         <dependency>
             <groupId>org.liquibase</groupId>
